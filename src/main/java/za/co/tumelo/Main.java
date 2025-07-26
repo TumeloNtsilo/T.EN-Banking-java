@@ -14,6 +14,9 @@ public class Main {
             int pin = sc.nextInt();
         }else if(answer.equalsIgnoreCase("no")){
             System.out.println("Let's open one for you then.");
+            CreateAccount createAccount = new CreateAccount();
+            createAccount.enterDetails();
+
         }
 
     }
