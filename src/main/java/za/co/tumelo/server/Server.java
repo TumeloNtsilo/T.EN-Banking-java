@@ -1,0 +1,42 @@
+package za.co.tumelo.server;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+
+public class Server {
+    private static final int Port = 6000;
+    private static ArrayList<ClientHandler> clients = new ArrayList<>();
+
+    public static void main(String[] args) throws IOException {
+        ServerSocket serverSocket = new ServerSocket(Port);
+        System.out.println("Server started, waiting for client to connect.");
+
+        while (true) {
+            try {
+                Socket socket = serverSocket.accept();
+                System.out.println("New client has connected");
+                ClientHandler clientHandler = new ClientHandler(socket);
+                addClients(clientHandler);
+                new Thread(clientHandler).start();
+
+            } catch (IOException e) {
+                if (serverSocket.isClosed()) {
+                    System.out.println("Server is closed");
+                    break;
+                }
+                System.err.println("Error connecting client " + e.getMessage());
+            }
+        }
+    }
+
+    public static void addClients(ClientHandler client){
+        clients.add(client);
+    }
+
+    public ArrayList<ClientHandler> getClients() {
+        return clients;
+    }
+
+}
