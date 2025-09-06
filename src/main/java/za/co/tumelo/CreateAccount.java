@@ -23,8 +23,7 @@ public class CreateAccount {
                 String name = sc.nextLine().trim();
                 if(name.isEmpty()) throw new IllegalArgumentException();
                 String[] names = name.split(" ");
-                System.out.println(names[0]);
-                System.out.println(names[1]);
+
 
                 System.out.println("Please Enter your second name: ");
                 String surname = sc.nextLine().trim();
@@ -73,6 +72,7 @@ public class CreateAccount {
     }
 
     public void printPersonalDetails(){
+        System.out.println("\nHere are your details");
         System.out.println(this.personalDetails);
     }
 

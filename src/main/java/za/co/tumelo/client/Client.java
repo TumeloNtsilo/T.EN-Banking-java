@@ -1,5 +1,6 @@
 package za.co.tumelo.client;
 
+import org.json.JSONObject;
 import za.co.tumelo.CreateAccount;
 
 import java.io.BufferedReader;
@@ -32,8 +33,7 @@ public class Client {
 
         }).start();
         welcome();
-
-
+        availableCommands();
 
         String input;
         while ((input = getUserInput("Type here: "))!= null) {
@@ -41,13 +41,11 @@ public class Client {
                 System.out.println("--------SERVER IS CLOSED--------");
                 break;
             }
-
             boolean isValid = CommandHandler(input);
-            if (isValid){
-                System.out.println(input);
-            }else if (!isValid || input == null){
-                System.out.println("input not valid.");
-                continue;
+            if (!isValid){
+                System.out.println("Input not valid");
+                availableCommands();
+
             }
         }
     }
@@ -80,7 +78,7 @@ public class Client {
 
         String input = sc.nextLine().trim();
         if (input.equalsIgnoreCase("n") || input.equalsIgnoreCase("no")) {
-            createNewAccount(input);
+            createNewAccount();
             System.out.println("Now go on and login: ");
             loginUser();
 
@@ -90,18 +88,24 @@ public class Client {
     }
 
     public static void createNewAccount(){
-        System.out.println("Now let us open one for you.");
+        System.out.println("\nNow let us open one for you.");
         CreateAccount createAccount = new CreateAccount();
         createAccount.enterDetails();
+        JSONObject details = createAccount.getPersonalDetails();
         createAccount.printPersonalDetails();
+        int pin = createAccount.createPin();
         System.out.println("Here is your pin number, use it login");
-        System.out.println("Pin: " + createAccount.createPin());
+        System.out.println("Pin: " + pin);
         System.out.println("Please keep it safe, and do not forget it.");
     }
 
     public static void loginUser(){
-        System.out.print("Please enter your pin to login: ");
-        int pin = sc.nextInt();
+        System.out.print("\nPlease enter your pin to login: ");
+        String pin = sc.nextLine();
+    }
+
+    public static void availableCommands(){
+        System.out.println("Available command: withdraw, deposit, balance, exit");
     }
 
 
