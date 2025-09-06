@@ -8,9 +8,10 @@ import java.util.ArrayList;
 public class Server {
     private static final int Port = 6000;
     private static ArrayList<ClientHandler> clients = new ArrayList<>();
+    private static ServerSocket serverSocket;
 
     public static void main(String[] args) throws IOException {
-        ServerSocket serverSocket = new ServerSocket(Port);
+        serverSocket = new ServerSocket(Port);
         System.out.println("Server started, waiting for client to connect.");
 
         while (true) {
@@ -23,7 +24,7 @@ public class Server {
 
             } catch (IOException e) {
                 if (serverSocket.isClosed()) {
-                    System.out.println("Server is closed");
+                    System.out.println("--------SERVER IS CLOSED--------");
                     break;
                 }
                 System.err.println("Error connecting client " + e.getMessage());
