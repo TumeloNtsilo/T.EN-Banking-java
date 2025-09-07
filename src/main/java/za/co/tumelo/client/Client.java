@@ -34,19 +34,23 @@ public class Client {
         }).start();
         welcome();
         availableCommands();
+        options();
 
-        String input;
-        while ((input = getUserInput("Type here: "))!= null) {
+
+        String command;
+        while ((command = getUserInput("Type here: "))!= null) {
             if (!checkConnection(socket)){
                 System.out.println("--------SERVER IS CLOSED--------");
                 break;
             }
-            boolean isValid = CommandHandler(input);
+
+            boolean isValid = CommandHandler(command);
             if (!isValid){
                 System.out.println("Input not valid");
                 availableCommands();
 
             }
+
         }
     }
 
@@ -106,6 +110,15 @@ public class Client {
 
     public static void availableCommands(){
         System.out.println("Available command: withdraw, deposit, balance, exit");
+    }
+
+    public static void options(){
+        System.out.println("How can we help you today?");
+        System.out.println("1. Withdraw cash");
+        System.out.println("2. Deposit cash");
+        System.out.println("3. View balance");
+        System.out.println("4. View statement");
+        System.out.println("5. Exit");
     }
 
 

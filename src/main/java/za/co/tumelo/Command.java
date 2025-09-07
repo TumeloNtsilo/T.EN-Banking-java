@@ -1,4 +1,8 @@
 package za.co.tumelo;
 
-public class Command {
+public abstract class Command {
+
+
+
+
 }

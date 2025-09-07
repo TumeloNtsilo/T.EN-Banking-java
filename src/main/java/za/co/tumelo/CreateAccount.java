@@ -80,4 +80,9 @@ public class CreateAccount {
         Random rd = new Random();
         return rd.nextInt(9000) + 1000;
     }
+
+    public static int getAccountNumber(){
+        Random rd = new Random();
+        return 100000000 + rd.nextInt(90000000);
+    }
 }
