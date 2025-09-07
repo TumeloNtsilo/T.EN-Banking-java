@@ -4,7 +4,7 @@
 #compile the project using maven
 echo "compiling..."
 cd /home/tumelo_ntsilo/Github_work/T.EN-Banking-java
-mvn compile exec:java -Dexec.mainClass="za.co.tumelo.client.Client"
+mvn compile
 
 #I will then package later..
 
@@ -19,9 +19,3 @@ java -cp target/classes za/co/tumelo/server/Server &
 #Give the server 2 seconds to start
 sleep 5
 
-#Start client
-echo
-echo "Starting the client"
-java -cp target/classes za/co/tumelo/client/Client
-
-sleep 2
