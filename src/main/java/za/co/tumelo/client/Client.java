@@ -33,29 +33,22 @@ public class Client {
 
         }).start();
         welcome();
-        availableCommands();
         options();
 
-
         String command;
+        CommandHandler handler = new CommandHandler();
         while ((command = getUserInput("Type here: "))!= null) {
             if (!checkConnection(socket)){
                 System.out.println("--------SERVER IS CLOSED--------");
                 break;
             }
 
-            boolean isValid = CommandHandler(command);
-            if (!isValid){
-                System.out.println("Input not valid");
-                availableCommands();
-
-            }
+            handler.handle(command);
 
         }
     }
 
     private static String getUserInput(String input) {
-        System.out.println(input);
         String userInput = sc.nextLine();
         while (userInput.isBlank()) {
             System.out.println(input);
@@ -67,11 +60,6 @@ public class Client {
 
     public static boolean checkConnection(Socket socket) {
         return socket != null && socket.isConnected() && !socket.isClosed();
-    }
-
-    private static boolean CommandHandler(String input) {
-        // accept anything that’s not blank
-        return input != null && !input.isBlank();
     }
 
     public static void welcome(){
@@ -108,17 +96,13 @@ public class Client {
         String pin = sc.nextLine();
     }
 
-    public static void availableCommands(){
-        System.out.println("Available command: withdraw, deposit, balance, exit");
-    }
-
     public static void options(){
         System.out.println("How can we help you today?");
-        System.out.println("1. Withdraw cash");
-        System.out.println("2. Deposit cash");
-        System.out.println("3. View balance");
-        System.out.println("4. View statement");
-        System.out.println("5. Exit");
+        System.out.println("1. withdraw");
+        System.out.println("2. deposit");
+        System.out.println("3. balance");
+        System.out.println("4. statement");
+        System.out.println("5. exit");
     }
 
 
