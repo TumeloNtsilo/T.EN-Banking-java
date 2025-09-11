@@ -44,8 +44,9 @@ public class Client {
             }
 
             handler.handle(command);
-
         }
+        socket.close();
+        System.exit(0);
     }
 
     private static String getUserInput(String input) {
