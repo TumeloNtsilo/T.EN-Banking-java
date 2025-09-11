@@ -50,10 +50,10 @@ public class Client {
     }
 
     private static String getUserInput(String input) {
-        String userInput = sc.nextLine();
+        String userInput = "";
         while (userInput.isBlank()) {
             System.out.println(input);
-            userInput = sc.nextLine();
+            userInput = sc.nextLine().trim();
         }
         return userInput;
     }
