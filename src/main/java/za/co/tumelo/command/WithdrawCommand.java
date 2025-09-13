@@ -23,6 +23,7 @@ public class WithdrawCommand extends Command{
 
         if(accountName.equalsIgnoreCase("credit")){
             System.out.println("Balance " + response.getCreditAccount().viewBalance());
+            System.out.println("Credit limit " + response.getCreditAccount().getCreditLimit());
             System.out.println("How much do you want to withdraw?");
             long money = sc.nextInt();
             long withdrawnMoney = response.getCreditAccount().withdraw(money);

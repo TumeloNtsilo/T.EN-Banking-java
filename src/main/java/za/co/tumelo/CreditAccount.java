@@ -9,6 +9,10 @@ public class CreditAccount extends Account {
         this.creditLimit = creditLimit;
     }
 
+    public long getCreditLimit() {
+        return creditLimit;
+    }
+
     @Override
     public long withdraw(long money) {
         long availableBalance = getMoney() + creditLimit;
