@@ -49,6 +49,8 @@ public class WithdrawCommand extends Command{
             }else if (money < 20){
                 message.put("Saving account", response.minimumWithdrawalIs20());
             }
+        }else {
+            System.out.println("Enter the correct account name (savings or credit");
         }
 
         return message;

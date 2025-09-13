@@ -62,11 +62,43 @@ public class Response {
 
     public JSONObject unSuccessfulCreditWithdrawal(){
         JSONObject response = new JSONObject();
-
         response.put("result", "insufficient funds, credit limit reached.");
         response.put("balance", creditAccount.viewBalance());
 
         return response;
+    }
+
+    public JSONObject successfulSavingsDeposit(){
+       JSONObject response = new JSONObject();
+       response.put("result", "deposit was successful");
+       response.put("balance", savingsAccount.viewBalance());
+
+       return response;
+    }
+
+    public JSONObject unsuccessfulSavingsDeposit(){
+        JSONObject response = new JSONObject();
+        response.put("result", "deposit was unsuccessful, a minimum amount to deposit is 10");
+        response.put("balance", savingsAccount.viewBalance());
+
+        return response;
+    }
+
+    public JSONObject successfulCreditDeposit(){
+        JSONObject response = new JSONObject();
+        response.put("result", "deposit was successful");
+        response.put("balance", creditAccount.viewBalance());
+
+        return response;
+    }
+
+    public JSONObject minimumAmountIs10(){
+        JSONObject response = new JSONObject();
+        response.put("result", "deposit was unsuccessful, a minimum amount to deposit is 10");
+        response.put("balance", creditAccount.viewBalance());
+
+        return response;
+
     }
 
 

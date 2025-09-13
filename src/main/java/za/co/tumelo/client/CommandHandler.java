@@ -65,8 +65,9 @@ public class CommandHandler {
             }
 
             case "deposit" -> {
-                Command deposit = new DepositCommand("deposit");
-                deposit.execute();
+                Command deposit = new DepositCommand(response);
+               JSONObject result = deposit.execute();
+                System.out.println(result);
             }
 
             case "statement" -> {

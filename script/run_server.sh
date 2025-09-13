@@ -17,5 +17,5 @@ echo "Server starting"
 java -cp target/classes za/co/tumelo/server/Server &
 
 #Give the server 2 seconds to start
-sleep 5
+sleep 2
 
