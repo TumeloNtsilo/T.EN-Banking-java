@@ -3,9 +3,9 @@ package za.co.tumelo;
 public class CreditAccount extends Account {
     private final long creditLimit;
 
-    // Constructor that allows starting balance and credit limit
+
     public CreditAccount(long initialBalance, long creditLimit) {
-        super(CreateAccount.getAccountNumber(), initialBalance); // sets account number and starting balance
+        super(CreateAccount.getAccountNumber(), initialBalance);
         this.creditLimit = creditLimit;
     }
 
