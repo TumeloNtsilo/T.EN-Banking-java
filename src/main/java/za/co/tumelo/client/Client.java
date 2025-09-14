@@ -37,7 +37,7 @@ public class Client {
 
         String command;
         CommandHandler handler = new CommandHandler();
-        while ((command = getUserInput("Type here: "))!= null) {
+        while ((command = getUserInput("\nType here: "))!= null) {
             if (!checkConnection(socket)){
                 System.out.println("--------SERVER IS CLOSED--------");
                 break;

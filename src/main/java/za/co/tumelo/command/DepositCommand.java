@@ -25,7 +25,7 @@ public class DepositCommand extends Command{
         String accountName = sc.nextLine();
 
         if(accountName.equalsIgnoreCase("credit")){
-            System.out.println(response.getCreditAccount().viewBalance());
+            System.out.println("Balance " + response.getCreditAccount().viewBalance());
             System.out.println("Enter the money to deposit.");
             long money = sc.nextLong();
 
@@ -38,7 +38,7 @@ public class DepositCommand extends Command{
 
 
         }else if(accountName.equalsIgnoreCase("savings")){
-            System.out.println(response.getSavingsAccount().viewBalance());
+            System.out.println("Balance " + response.getSavingsAccount().viewBalance());
             System.out.println("Enter the money to deposit.");
             long money = sc.nextLong();
 

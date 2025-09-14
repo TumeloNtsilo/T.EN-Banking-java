@@ -18,21 +18,12 @@ public class ClientHandler implements Runnable{
     }
 
 
-    public boolean validateCommand(String command){
-
-
-        return false;
-    }
-
 
     @Override
     public void run() {
         try{
             while(in.readLine() != null){
-                String command = in.readLine();
-                if(validateCommand(command)){
-                    System.out.println();
-                }
+
 
             }
         } catch (IOException e) {
