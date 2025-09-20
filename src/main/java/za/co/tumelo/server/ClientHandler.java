@@ -22,8 +22,9 @@ public class ClientHandler implements Runnable{
     @Override
     public void run() {
         try{
-            while(in.readLine() != null){
-
+            String message = in.readLine();
+            while(message != null){
+                System.out.println(message);
 
             }
         } catch (IOException e) {

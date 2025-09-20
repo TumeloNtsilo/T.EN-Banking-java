@@ -52,6 +52,7 @@ public class CreateAccount {
                     System.exit(0);
                 }
 
+                personalDetails.put("action", "Create_account");
                 personalDetails.put("Name(s)", name);
                 personalDetails.put("Surname", surname);
                 personalDetails.put("Date of birth", dateOfBirth.toString());

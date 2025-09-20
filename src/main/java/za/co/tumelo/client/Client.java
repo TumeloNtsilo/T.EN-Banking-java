@@ -32,7 +32,7 @@ public class Client {
             }
 
         }).start();
-        welcome();
+        welcome(out);
         options();
 
         String command;
@@ -63,7 +63,7 @@ public class Client {
         return socket != null && socket.isConnected() && !socket.isClosed();
     }
 
-    public static void welcome(){
+    public static void welcome(PrintWriter out){
         System.out.println("Welcome to T.EN Bank");
         System.out.println("Where trust and the elegant of banking meet");
         System.out.println();
@@ -71,30 +71,42 @@ public class Client {
 
         String input = sc.nextLine().trim();
         if (input.equalsIgnoreCase("n") || input.equalsIgnoreCase("no")) {
-            createNewAccount();
+            createNewAccount(out);
             System.out.println("Now go on and login: ");
-            loginUser();
+            loginUser(out);
 
         } else if (input.equalsIgnoreCase("y") || input.equalsIgnoreCase("yes")){
-            loginUser();
+            loginUser(out);
         }
     }
 
-    public static void createNewAccount(){
+    public static void createNewAccount(PrintWriter out){
         System.out.println("\nNow let us open one for you.");
         CreateAccount createAccount = new CreateAccount();
         createAccount.enterDetails();
-        JSONObject details = createAccount.getPersonalDetails();
         createAccount.printPersonalDetails();
+
         int pin = createAccount.createPin();
         System.out.println("Here is your pin number, use it login");
         System.out.println("Pin: " + pin);
         System.out.println("Please keep it safe, and do not forget it.");
+
+        JSONObject details = createAccount.getPersonalDetails();
+        details.put("pin", pin);
+
+        out.println(details.toString());
+
     }
 
-    public static void loginUser(){
+    public static void loginUser(PrintWriter out){
         System.out.print("\nPlease enter your pin to login: ");
         String pin = sc.nextLine();
+        JSONObject login = new JSONObject();
+
+        login.put("action", "login");
+        login.put("pin", pin);
+        out.println(login.toString());
+
     }
 
     public static void options(){
