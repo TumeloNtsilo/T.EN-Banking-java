@@ -43,7 +43,7 @@ public class Client {
                 break;
             }
 
-            handler.handle(command);
+            handler.handle(command, out);
         }
         socket.close();
         System.exit(0);

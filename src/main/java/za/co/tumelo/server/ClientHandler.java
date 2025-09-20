@@ -24,7 +24,8 @@ public class ClientHandler implements Runnable{
         try{
             String message = in.readLine();
             while(message != null){
-                System.out.println(message);
+                //System.out.println(message);
+
 
             }
         } catch (IOException e) {

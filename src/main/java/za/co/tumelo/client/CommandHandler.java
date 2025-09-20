@@ -4,6 +4,8 @@ import org.json.JSONObject;
 import za.co.tumelo.Response;
 import za.co.tumelo.command.*;
 
+import java.io.PrintWriter;
+
 public class CommandHandler {
     private final Response response = new Response();
 
@@ -45,7 +47,7 @@ public class CommandHandler {
     }
 
 
-    public void handle(String command){
+    public void handle(String command, PrintWriter out){
         if(!isValid(command)){
             printHelp();
             return;
@@ -55,19 +57,35 @@ public class CommandHandler {
             case "balance" -> {
                 Command balance = new BalanceCommand(response);
                 JSONObject result = balance.execute();
-                System.out.println(result.toString());
+                System.out.println(result);
+
+                JSONObject request = new JSONObject();
+                request.put("action", "balance");
+                request.put("amount", result);
+                out.println(request.toString());
             }
 
             case "withdraw" -> {
                Command withdraw = new WithdrawCommand(response);
                JSONObject result  = withdraw.execute();
                 System.out.println(result);
+
+                JSONObject request = new JSONObject();
+                request.put("action", "withdraw");
+                request.put("amount", result);
+                out.println(request.toString());
+
             }
 
             case "deposit" -> {
                 Command deposit = new DepositCommand(response);
                JSONObject result = deposit.execute();
                 System.out.println(result);
+
+                JSONObject request = new JSONObject();
+                request.put("action", "deposit");
+                request.put("amount", result);
+                out.println(request.toString());
             }
 
             case "statement" -> {
