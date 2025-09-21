@@ -5,9 +5,11 @@ import za.co.tumelo.Response;
 import za.co.tumelo.command.*;
 
 import java.io.PrintWriter;
+import java.util.Scanner;
 
 public class CommandHandler {
     private final Response response = new Response();
+    private final Scanner sc = new Scanner(System.in);
 
 
     public void printHelp(){
@@ -55,42 +57,36 @@ public class CommandHandler {
 
         switch (command){
             case "balance" -> {
-                Command balance = new BalanceCommand(response);
-                JSONObject result = balance.execute();
-                System.out.println(result);
-
                 JSONObject request = new JSONObject();
                 request.put("action", "balance");
-                request.put("amount", result);
+
                 out.println(request.toString());
             }
 
             case "withdraw" -> {
-               Command withdraw = new WithdrawCommand(response);
-               JSONObject result  = withdraw.execute();
-                System.out.println(result);
-
                 JSONObject request = new JSONObject();
-                request.put("action", "withdraw");
-                request.put("amount", result);
-                out.println(request.toString());
 
+                System.out.println("Withdraw from which account, credit or savings? (type credit or savings)");
+                String account = sc.nextLine();
+
+                long money = moneyToWithdraw();
+                request.put("action", "withdraw");
+                request.put("account", account);
+                request.put("amount", money);
+                out.println(request.toString());
+                System.out.println("message sent");
             }
 
             case "deposit" -> {
-                Command deposit = new DepositCommand(response);
-               JSONObject result = deposit.execute();
-                System.out.println(result);
-
                 JSONObject request = new JSONObject();
                 request.put("action", "deposit");
-                request.put("amount", result);
                 out.println(request.toString());
             }
 
             case "statement" -> {
-                Command statement = new StatementCommand("statement");
-                statement.execute();
+                JSONObject request = new JSONObject();
+                request.put("action", "statement");
+                out.println(request.toString());
             }
 
             case "exit" -> {
@@ -103,4 +99,10 @@ public class CommandHandler {
 
         }
     }
+
+    public long moneyToWithdraw(){
+        System.out.println("How much do you want to withdraw?");
+        return sc.nextInt();
+    }
+
 }

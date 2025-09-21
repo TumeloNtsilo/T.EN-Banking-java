@@ -2,6 +2,9 @@ package za.co.tumelo.command;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+
 public abstract class Command {
     private String name;
 
@@ -9,6 +12,6 @@ public abstract class Command {
         this.name = name;
     }
 
-    public abstract JSONObject execute();
+    public abstract JSONObject execute(PrintWriter out) throws IOException;
 
 }

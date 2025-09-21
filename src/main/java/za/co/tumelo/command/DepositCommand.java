@@ -2,6 +2,8 @@ package za.co.tumelo.command;
 
 import org.json.JSONObject;
 import za.co.tumelo.Response;
+
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class DepositCommand extends Command{
@@ -14,20 +16,20 @@ public class DepositCommand extends Command{
         this.response = response;
     }
 
-    public long moneyToDeposit(){
+    public long moneyToDeposit(PrintWriter out){
         System.out.println("Enter the money to deposit.");
         return sc.nextLong();
     }
 
     @Override
-    public JSONObject execute() {
+    public JSONObject execute(PrintWriter out) {
         JSONObject message = new JSONObject();
-        System.out.println("Enter the account you want to deposit to: (savings or credit)");
+        out.println("Enter the account you want to deposit to: (savings or credit)");
         String accountName = sc.nextLine();
 
         if(accountName.equalsIgnoreCase("credit")){
-            System.out.println("\nBalance " + response.getCreditAccount().viewBalance());
-            long money = moneyToDeposit();
+            out.println("\nBalance " + response.getCreditAccount().viewBalance());
+            long money = moneyToDeposit(out);
 
             if(money < 10){
                 message.put("Credit", response.minimumAmountIs10());
@@ -38,8 +40,8 @@ public class DepositCommand extends Command{
 
 
         }else if(accountName.equalsIgnoreCase("savings")){
-            System.out.println("\nBalance " + response.getSavingsAccount().viewBalance());
-            long money = moneyToDeposit();
+            out.println("\nBalance " + response.getSavingsAccount().viewBalance());
+            long money = moneyToDeposit(out);
 
             if(money < 10){
                 message.put("Credit", response.unsuccessfulSavingsDeposit());
@@ -49,7 +51,7 @@ public class DepositCommand extends Command{
             }
 
         }else {
-            System.out.println("Enter the correct account name (savings or credit)");
+            out.println("Enter the correct account name (savings or credit)");
         }
 
 
