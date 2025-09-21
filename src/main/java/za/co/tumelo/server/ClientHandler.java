@@ -1,15 +1,25 @@
 package za.co.tumelo.server;
 
+import org.json.JSONObject;
+import za.co.tumelo.Response;
+import za.co.tumelo.command.BalanceCommand;
+import za.co.tumelo.command.Command;
+import za.co.tumelo.command.DepositCommand;
+import za.co.tumelo.command.WithdrawCommand;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import static java.lang.Long.parseLong;
+
 public class ClientHandler implements Runnable{
     private final Socket clientSocket;
-    private BufferedReader in;
+    private static BufferedReader in;
     private PrintWriter out;
+    private final Response response = new Response();
 
     public ClientHandler(Socket clientSocket) throws IOException {
         this.clientSocket = clientSocket;
@@ -22,9 +32,19 @@ public class ClientHandler implements Runnable{
     @Override
     public void run() {
         try{
-            String message = in.readLine();
-            while(message != null){
-                //System.out.println(message);
+            String message;
+            while((message = in.readLine()) != null){
+                JSONObject request = new JSONObject(message);
+                String action = request.optString("action", "");
+
+                switch (action.toLowerCase().trim()){
+                    case "login" -> handleLogin();
+                    case "balance" -> handleBalance();
+                    case "withdraw" -> handleWithdraw(request);
+                    case "deposit" -> handleDeposit();
+                    case "statement" -> handleStatement();
+                    default -> out.println("Enter the correct command.");
+                }
 
 
             }
@@ -33,5 +53,35 @@ public class ClientHandler implements Runnable{
         }
 
     }
+
+    public void handleLogin(){
+       out.println("You have successfully logged in.");
+    }
+
+    public void handleBalance() throws IOException {
+        Command balance = new BalanceCommand(response);
+        JSONObject result = balance.execute(out);
+        out.println(result.toString());
+    }
+
+    public void handleDeposit() throws IOException {
+        Command deposit = new DepositCommand(response);
+        JSONObject result = deposit.execute(out);
+        out.println(result.toString());
+    }
+
+    public void handleWithdraw(JSONObject request) throws IOException {
+        Command withdraw = new WithdrawCommand(response, request);
+        JSONObject result = withdraw.execute(out);
+        out.println(result.toString());
+    }
+
+
+    public void handleStatement(){
+        //
+    }
+
+
+
 
 }
