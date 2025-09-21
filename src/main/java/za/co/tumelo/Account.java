@@ -1,5 +1,6 @@
 package za.co.tumelo;
 
+
 public abstract class Account {
     private int accountNumber;
     private long money;
