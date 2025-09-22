@@ -9,7 +9,6 @@ import java.util.Scanner;
 
 public class CommandHandler {
     private final Response response = new Response();
-    private final Scanner sc = new Scanner(System.in);
 
 
     public void printHelp(){
@@ -49,7 +48,7 @@ public class CommandHandler {
     }
 
 
-    public void handle(String command, PrintWriter out){
+    public void handle(String command, PrintWriter out, Scanner sc){
         if(!isValid(command)){
             printHelp();
             return;
@@ -69,17 +68,23 @@ public class CommandHandler {
                 System.out.println("Withdraw from which account, credit or savings? (type credit or savings)");
                 String account = sc.nextLine();
 
-                long money = moneyToWithdraw();
+                long money = moneyToWithdraw(sc);
                 request.put("action", "withdraw");
                 request.put("account", account);
                 request.put("amount", money);
                 out.println(request.toString());
-                System.out.println("message sent");
             }
 
             case "deposit" -> {
                 JSONObject request = new JSONObject();
+
+                System.out.println("Enter the account you want to deposit to: (savings or credit)");
+                String accountName = sc.nextLine();
+
+                long money = moneyToDeposit(sc);
                 request.put("action", "deposit");
+                request.put("account", accountName);
+                request.put("amount", money);
                 out.println(request.toString());
             }
 
@@ -100,9 +105,18 @@ public class CommandHandler {
         }
     }
 
-    public long moneyToWithdraw(){
+    public long moneyToWithdraw(Scanner sc){
         System.out.println("How much do you want to withdraw?");
-        return sc.nextInt();
+        long money = sc.nextInt();
+        sc.nextLine();
+        return money;
+    }
+
+    public long moneyToDeposit(Scanner sc){
+        System.out.println("Enter the money to deposit.");
+        long money = sc.nextInt();
+        sc.nextLine();
+        return money;
     }
 
 }

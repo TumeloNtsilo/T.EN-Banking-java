@@ -43,7 +43,7 @@ public class Client {
                 break;
             }
 
-            handler.handle(command, out);
+            handler.handle(command, out, sc);
         }
         socket.close();
         System.exit(0);
@@ -52,7 +52,7 @@ public class Client {
     private static String getUserInput(String input) {
         String userInput = "";
         while (userInput.isBlank()) {
-            System.out.println(input);
+            System.out.print(input);
             userInput = sc.nextLine().trim();
         }
         return userInput;

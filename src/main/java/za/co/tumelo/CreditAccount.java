@@ -17,11 +17,9 @@ public class CreditAccount extends Account {
     public long withdraw(long money) {
         long availableBalance = getMoney() + creditLimit;
         if (money > availableBalance) {
-            System.out.println("Insufficient funds, credit limit reached.");
             return 0;
         }
         setMoney(getMoney() - money);
-        System.out.println("Withdrawal successful. Current balance: " + viewBalance());
         return money;
     }
 
