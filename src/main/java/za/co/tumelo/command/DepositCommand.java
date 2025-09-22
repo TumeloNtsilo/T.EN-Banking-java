@@ -8,28 +8,26 @@ import java.util.Scanner;
 
 public class DepositCommand extends Command{
     private final Response response;
-    private final Scanner sc = new Scanner(System.in);
+    private final JSONObject request;
 
 
-    public DepositCommand(Response response) {
+    public DepositCommand(Response response, JSONObject request) {
         super("deposit");
         this.response = response;
+        this.request = request;
     }
 
-    public long moneyToDeposit(PrintWriter out){
-        System.out.println("Enter the money to deposit.");
-        return sc.nextLong();
-    }
+
 
     @Override
     public JSONObject execute(PrintWriter out) {
         JSONObject message = new JSONObject();
-        out.println("Enter the account you want to deposit to: (savings or credit)");
-        String accountName = sc.nextLine();
+
+        String accountName = request.optString("account", "");
+        long money = request.optLong("amount", 0);
 
         if(accountName.equalsIgnoreCase("credit")){
             out.println("\nBalance " + response.getCreditAccount().viewBalance());
-            long money = moneyToDeposit(out);
 
             if(money < 10){
                 message.put("Credit", response.minimumAmountIs10());
@@ -41,7 +39,6 @@ public class DepositCommand extends Command{
 
         }else if(accountName.equalsIgnoreCase("savings")){
             out.println("\nBalance " + response.getSavingsAccount().viewBalance());
-            long money = moneyToDeposit(out);
 
             if(money < 10){
                 message.put("Credit", response.unsuccessfulSavingsDeposit());
@@ -53,7 +50,6 @@ public class DepositCommand extends Command{
         }else {
             out.println("Enter the correct account name (savings or credit)");
         }
-
 
         return message;
     }

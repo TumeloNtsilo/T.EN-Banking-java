@@ -41,7 +41,7 @@ public class ClientHandler implements Runnable{
                     case "login" -> handleLogin();
                     case "balance" -> handleBalance();
                     case "withdraw" -> handleWithdraw(request);
-                    case "deposit" -> handleDeposit();
+                    case "deposit" -> handleDeposit(request);
                     case "statement" -> handleStatement();
                     default -> out.println("Enter the correct command.");
                 }
@@ -64,8 +64,8 @@ public class ClientHandler implements Runnable{
         out.println(result.toString());
     }
 
-    public void handleDeposit() throws IOException {
-        Command deposit = new DepositCommand(response);
+    public void handleDeposit(JSONObject request) throws IOException {
+        Command deposit = new DepositCommand(response, request);
         JSONObject result = deposit.execute(out);
         out.println(result.toString());
     }
