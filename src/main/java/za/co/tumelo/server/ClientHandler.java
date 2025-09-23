@@ -38,7 +38,7 @@ public class ClientHandler implements Runnable{
                 String action = request.optString("action", "");
 
                 switch (action.toLowerCase().trim()){
-                    case "login" -> handleLogin();
+                    case "login" -> out.println();
                     case "balance" -> handleBalance();
                     case "withdraw" -> handleWithdraw(request);
                     case "deposit" -> handleDeposit(request);
@@ -54,9 +54,9 @@ public class ClientHandler implements Runnable{
 
     }
 
-    public void handleLogin(){
-       out.println("You have successfully logged in.");
-    }
+//    public void handleLogin(){
+//       out.println("You have successfully logged in.");
+//    }
 
     public void handleBalance() throws IOException {
         Command balance = new BalanceCommand(response);

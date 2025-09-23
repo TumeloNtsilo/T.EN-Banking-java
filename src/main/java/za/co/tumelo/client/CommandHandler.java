@@ -58,7 +58,6 @@ public class CommandHandler {
             case "balance" -> {
                 JSONObject request = new JSONObject();
                 request.put("action", "balance");
-
                 out.println(request.toString());
             }
 

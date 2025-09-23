@@ -52,7 +52,7 @@ public class Client {
     private static String getUserInput(String input) {
         String userInput = "";
         while (userInput.isBlank()) {
-            System.out.print(input);
+            System.out.println(input);
             userInput = sc.nextLine().trim();
         }
         return userInput;
@@ -99,7 +99,7 @@ public class Client {
     }
 
     public static void loginUser(PrintWriter out){
-        System.out.print("\nPlease enter your pin to login: ");
+        System.out.println("\nPlease enter your pin to login: ");
         String pin = sc.nextLine();
         JSONObject login = new JSONObject();
 
@@ -111,11 +111,7 @@ public class Client {
 
     public static void options(){
         System.out.println("How can we help you today?");
-        System.out.println("1. withdraw");
-        System.out.println("2. deposit");
-        System.out.println("3. balance");
-        System.out.println("4. statement");
-        System.out.println("5. exit");
+        System.out.println("1. withdraw\n2. deposit\n3. balance\n4. statement\n5. exit");
     }
 
 
