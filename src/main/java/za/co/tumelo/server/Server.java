@@ -4,15 +4,23 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Server {
     private static final int Port = 6000;
     private static ArrayList<ClientHandler> clients = new ArrayList<>();
     private static ServerSocket serverSocket;
 
+
     public static void main(String[] args) throws IOException {
         serverSocket = new ServerSocket(Port);
         System.out.println("Server started, waiting for client to connect.");
+
+        ServerCommands serverCommands = new ServerCommands();
+        Thread adminCommands = new Thread(serverCommands);
+        adminCommands.setDaemon(true);
+        adminCommands.start();
+
 
         while (true) {
             try {
@@ -36,8 +44,15 @@ public class Server {
         clients.add(client);
     }
 
-    public ArrayList<ClientHandler> getClients() {
+    public static ArrayList<ClientHandler> getClients() {
         return clients;
+    }
+
+    public static void closeQuietly() throws IOException {
+       if(!serverSocket.isClosed()){
+           System.out.println("Closing server....");
+           serverSocket.close();
+       }
     }
 
 }

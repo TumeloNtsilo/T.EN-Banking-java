@@ -25,6 +25,10 @@ public class Client {
             try{
                 String response;
                 while((response = in.readLine()) != null){
+                    if(response.contains("quit")){
+                        System.out.println("Closing Server, Goodbye!\n------------Server is closed-----------");
+                        System.exit(0);
+                    }
                     System.out.println(response);
                 }
             } catch (IOException e) {
