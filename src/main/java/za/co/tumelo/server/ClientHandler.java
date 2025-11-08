@@ -6,6 +6,7 @@ import za.co.tumelo.command.BalanceCommand;
 import za.co.tumelo.command.Command;
 import za.co.tumelo.command.DepositCommand;
 import za.co.tumelo.command.WithdrawCommand;
+import za.co.tumelo.database.ClientsRepo;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -43,6 +44,7 @@ public class ClientHandler implements Runnable{
                     case "withdraw" -> handleWithdraw(request);
                     case "deposit" -> handleDeposit(request);
                     case "statement" -> handleStatement();
+                    case "register" -> registerClient(request);
                     default -> sendMessage("Invalid command");
                 }
 
@@ -82,6 +84,10 @@ public class ClientHandler implements Runnable{
     public void sendMessage(String message){
         out.println(message);
         out.flush();
+    }
+
+    public void registerClient(JSONObject request){
+        ClientsRepo.addClients(request.getString("Name(s)") + " " + request.getString("Surname"), request.getString("Date of birth"), request.getInt("pin"));
     }
 
 

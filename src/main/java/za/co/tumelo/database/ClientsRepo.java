@@ -6,15 +6,14 @@ import java.sql.SQLException;
 
 public class ClientsRepo {
 
-    public void addClients(String full_name, String date_of_birth, String email, String pin){
-        String sql = "INSERT INTO clients (full_name, date_of_birth, email, pin) VALUES (?, ?, ?, ?)";
+    public static void addClients(String full_name, String date_of_birth, int pin){
+        String sql = "INSERT INTO clients (full_name, date_of_birth, pin) VALUES (?, ?, ?)";
         try(Connection connection = DatabaseConnection.getConnection();
             PreparedStatement stmt = connection.prepareStatement(sql)) {
 
             stmt.setString(1, full_name);
             stmt.setString(2, date_of_birth);
-            stmt.setString(3, email);
-            stmt.setString(4, pin);
+            stmt.setInt(3, pin);
 
             int rowsInserted = stmt.executeUpdate();
             if(rowsInserted > 0){

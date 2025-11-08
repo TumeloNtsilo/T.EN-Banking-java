@@ -96,6 +96,7 @@ public class Client {
         System.out.println("Please keep it safe, and do not forget it.");
 
         JSONObject details = createAccount.getPersonalDetails();
+        details.put("action", "register");
         details.put("pin", pin);
 
         out.println(details.toString());
