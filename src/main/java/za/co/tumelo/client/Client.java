@@ -17,15 +17,17 @@ public class Client {
              BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
              PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
 
-            new Thread(() -> listenForServerMessages(in)).start();
+            new Thread(() -> listenForServerMessages(in, out)).start();
 
             displayWelcomeMessage();
             handleAccountChoice(out);
 
             CommandHandler handler = new CommandHandler();
             while (checkConnection(socket)) {
-                String command = getUserInput("\nEnter a command (type 'help' to see options): ");
-                handler.handle(command, out, sc);
+                String command = sc.nextLine().trim();
+                if (!command.isBlank()) {
+                    handler.handle(command, out, sc);
+                }
             }
 
             System.out.println("Connection closed. Goodbye!");
@@ -34,16 +36,26 @@ public class Client {
         }
     }
 
-    private static void listenForServerMessages(BufferedReader in) {
+    private static void listenForServerMessages(BufferedReader in, PrintWriter out) {
         try {
             String response;
             while ((response = in.readLine()) != null) {
-                if (response.contains("quit")) {
+                if (response.startsWith("Hello")) {
+                    System.out.println("\n" + response);
+                }
+                else if (response.contains("quit")) {
                     System.out.println("\nServer has been closed. Goodbye!");
                     System.exit(0);
-                } else if (response.contains("Pin is correct")) {
+                }
+                else if (response.contains("Pin is correct")) {
                     displayOptions();
-                } else {
+                    System.out.print("\nEnter a command (type 'help' to see options): ");
+                }
+                else if (response.contains("Incorrect pin")) {
+                    System.out.println("\nIncorrect PIN. Please try again.");
+                    loginUser(out);
+                }
+                else {
                     System.out.println(response);
                 }
             }
@@ -110,16 +122,6 @@ public class Client {
         System.out.println("- Check Balance");
         System.out.println("- View Statement");
         System.out.println("️- Exit");
-    }
-
-    private static String getUserInput(String message) {
-        System.out.print(message);
-        String input = sc.nextLine().trim();
-        while (input.isBlank()) {
-            System.out.print("Please enter a valid command: ");
-            input = sc.nextLine().trim();
-        }
-        return input;
     }
 
     private static int readIntInput() {

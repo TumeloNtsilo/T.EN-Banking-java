@@ -21,4 +21,23 @@ public class ClientDAO {
             return false;
         }
     }
+
+    public static String getNameUsingPin(int pin){
+        String query = "SELECT full_name FROM clients WHERE pin = ?";
+        try(Connection connection = DatabaseConnection.getConnection();
+            PreparedStatement stmt = connection.prepareStatement(query)) {
+
+            stmt.setInt(1, pin);
+            ResultSet result = stmt.executeQuery();
+
+            if(result.next()){
+                return result.getString("full_name");
+            }else{
+                return null;
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
