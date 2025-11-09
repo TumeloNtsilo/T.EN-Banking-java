@@ -3,121 +3,137 @@ package za.co.tumelo.client;
 import org.json.JSONObject;
 import za.co.tumelo.CreateAccount;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
 public class Client {
-    private static final int port = 6000;
-    private static final String host = "localhost";
-    private static Scanner sc = new Scanner(System.in);
+    private static final int PORT = 6000;
+    private static final String HOST = "localhost";
+    private static final Scanner sc = new Scanner(System.in);
 
+    public static void main(String[] args) {
+        try (Socket socket = new Socket(HOST, PORT);
+             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+             PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
 
-    public static void main(String[] args) throws IOException {
-        Socket socket = new Socket(host, port);
-        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            new Thread(() -> listenForServerMessages(in)).start();
 
-        new Thread (() -> {
-            try{
-                String response;
-                while((response = in.readLine()) != null){
-                    if(response.contains("quit")){
-                        System.out.println("Closing Server, Goodbye!\n------------Server is closed-----------");
-                        System.exit(0);
-                    }
+            displayWelcomeMessage();
+            handleAccountChoice(out);
+
+            CommandHandler handler = new CommandHandler();
+            while (checkConnection(socket)) {
+                String command = getUserInput("\nEnter a command (type 'help' to see options): ");
+                handler.handle(command, out, sc);
+            }
+
+            System.out.println("Connection closed. Goodbye!");
+        } catch (IOException e) {
+            System.out.println("Error: Unable to connect to server. Please try again later.");
+        }
+    }
+
+    private static void listenForServerMessages(BufferedReader in) {
+        try {
+            String response;
+            while ((response = in.readLine()) != null) {
+                if (response.contains("quit")) {
+                    System.out.println("\nServer has been closed. Goodbye!");
+                    System.exit(0);
+                } else if (response.contains("Pin is correct")) {
+                    displayOptions();
+                } else {
                     System.out.println(response);
                 }
-            } catch (IOException e) {
-                System.out.println("Disconnected, please login again.");;
             }
-
-        }).start();
-        welcome(out);
-        options();
-
-        String command;
-        CommandHandler handler = new CommandHandler();
-        while ((command = getUserInput("\nType here: "))!= null) {
-            if (!checkConnection(socket)){
-                System.out.println("--------SERVER IS CLOSED--------");
-                break;
-            }
-
-            handler.handle(command, out, sc);
+        } catch (IOException e) {
+            System.out.println("Lost connection to the server. Please restart and login again.");
         }
-        socket.close();
-        System.exit(0);
     }
 
-    private static String getUserInput(String input) {
-        String userInput = "";
-        while (userInput.isBlank()) {
-            System.out.println(input);
-            userInput = sc.nextLine().trim();
-        }
-        return userInput;
+    private static void displayWelcomeMessage() {
+        System.out.println("=====================================");
+        System.out.println("     Welcome to T.EN Bank   ");
+        System.out.println(" Where Trust Meets the Art of Banking ");
+        System.out.println("=====================================\n");
     }
 
+    private static void handleAccountChoice(PrintWriter out) {
+        String input;
+        do {
+            System.out.print("Do you have an account? (y/n): ");
+            input = sc.nextLine().trim().toLowerCase();
+        } while (!input.equals("y") && !input.equals("n"));
 
-    public static boolean checkConnection(Socket socket) {
-        return socket != null && socket.isConnected() && !socket.isClosed();
-    }
-
-    public static void welcome(PrintWriter out){
-        System.out.println("Welcome to T.EN Bank");
-        System.out.println("Where trust and the elegant of banking meet");
-        System.out.println();
-        System.out.println("Do you have an account? (y/n)");
-
-        String input = sc.nextLine().trim();
-        if (input.equalsIgnoreCase("n") || input.equalsIgnoreCase("no")) {
+        if (input.equals("n")) {
             createNewAccount(out);
-            System.out.println("Now go on and login: ");
+            System.out.println("\nAccount created successfully!");
+            System.out.println("Please log in to continue.\n");
             loginUser(out);
-
-        } else if (input.equalsIgnoreCase("y") || input.equalsIgnoreCase("yes")){
+        } else {
             loginUser(out);
         }
     }
 
-    public static void createNewAccount(PrintWriter out){
-        System.out.println("\nNow let us open one for you.");
+    private static void createNewAccount(PrintWriter out) {
+        System.out.println("\nLet's create your new account.");
         CreateAccount createAccount = new CreateAccount();
         createAccount.enterDetails();
         createAccount.printPersonalDetails();
 
         int pin = createAccount.createPin();
-        System.out.println("Here is your pin number, use it login");
-        System.out.println("Pin: " + pin);
-        System.out.println("Please keep it safe, and do not forget it.");
+        System.out.println("\nHere is your new PIN: " + pin);
+        System.out.println("Please keep it safe and do not share it with anyone.");
 
         JSONObject details = createAccount.getPersonalDetails();
         details.put("action", "register");
         details.put("pin", pin);
 
         out.println(details.toString());
-
     }
 
-    public static void loginUser(PrintWriter out){
-        System.out.println("\nPlease enter your pin to login: ");
-        String pin = sc.nextLine();
+    private static void loginUser(PrintWriter out) {
+        System.out.print("\nPlease enter your PIN to log in: ");
+        int pin = readIntInput();
         JSONObject login = new JSONObject();
-
         login.put("action", "login");
         login.put("pin", pin);
+
         out.println(login.toString());
-
     }
 
-    public static void options(){
-        System.out.println("How can we help you today?");
-        System.out.println("1. withdraw\n2. deposit\n3. balance\n4. statement\n5. exit");
+    private static void displayOptions() {
+        System.out.println("\nAvailable Services:");
+        System.out.println("- Withdraw");
+        System.out.println("- Deposit");
+        System.out.println("- Check Balance");
+        System.out.println("- View Statement");
+        System.out.println("️- Exit");
     }
 
+    private static String getUserInput(String message) {
+        System.out.print(message);
+        String input = sc.nextLine().trim();
+        while (input.isBlank()) {
+            System.out.print("Please enter a valid command: ");
+            input = sc.nextLine().trim();
+        }
+        return input;
+    }
 
+    private static int readIntInput() {
+        while (true) {
+            String input = sc.nextLine().trim();
+            try {
+                return Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.print("Invalid number. Please enter digits only: ");
+            }
+        }
+    }
+
+    private static boolean checkConnection(Socket socket) {
+        return socket != null && socket.isConnected() && !socket.isClosed();
+    }
 }

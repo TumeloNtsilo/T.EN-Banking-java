@@ -7,7 +7,6 @@ import java.sql.SQLException;
 public class DatabaseConnection {
     private static final String url = "jdbc:sqlite:/home/tumelo_ntsilo/Github_work/T.EN-Banking-java/bank.db";
 
-
     public static Connection getConnection() {
         try {
             Connection conn = DriverManager.getConnection(url);
