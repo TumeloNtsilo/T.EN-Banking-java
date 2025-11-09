@@ -95,7 +95,7 @@ public class ClientHandler implements Runnable{
         if(ClientDAO.isPinOkay(pin)){
             out.println("Pin is correct");
         }else {
-            out.println("Pin incorrect\nTry again!");
+            out.println("Incorrect pin");
         }
     }
 
